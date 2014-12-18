@@ -1,0 +1,74 @@
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
+<!-- マップ コンポーネント -->
+<polymer-element name="leaflet-map" attributes="mapid long lat zoom">
+  <template>
+    <style>
+    </style>
+  </template>
+  <script>
+
+    var values = {};
+    var layers = [];
+    var feature_attr = {};
+    var map;
+
+    Polymer('leaflet-map', {
+
+      leafletUrl: 'http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js',
+
+      map: null,
+
+      ready: function() {
+        this.values = values;
+        for (var i = 0; i < this.attributes.length; ++i) {
+          var attr = this.attributes[i];
+          values[attr.nodeName] = attr.value;
+        }
+
+        var leafletUrl = this.leafletUrl;
+        this.leafletUrl = leafletUrl;
+        this.addScript(this.leafletUrl, "leaflet");
+      },
+
+      addScript: function(src, type) {
+        console.log("leaflet-api: addScript");
+        var script = document.createElement('script');
+        script.src = src;
+        if(type === "leaflet") {
+          script.onload = this.mapReady;
+        }
+        var s = document.querySelector('script');
+        s.parentNode.insertBefore(script, s);
+        this.script = script;
+      },
+
+      mapReady: function() {
+        console.log("leaflet-api: mapReady");
+        console.log()
+
+        this.map = L.map("map").setView([Number(values["lat"]), Number(values["long"])], Number(values["zoom"]));
+        map = this.map;
+
+        this.map = map;
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+      }
+
+    });
+
+  </script>
+</polymer-element>

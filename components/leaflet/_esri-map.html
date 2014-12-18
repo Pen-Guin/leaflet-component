@@ -1,0 +1,138 @@
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<!--<link rel="import" href="leaflet-api.html">-->
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+
+<polymer-element name="esri-map" attributes="long lat zoom">
+  <template>
+    <style>
+    :host {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+    </style>
+  </template>
+  <script>
+
+    Polymer('esri-map', {
+
+      leafletUrl: 'http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js',
+      esrileafletUrl: 'http://ej000417/3rdParty/esriLeaflet/samples/lib/esri-leaflet/esri-leaflet.js',
+
+      long: 139,
+
+      lat: 35,
+
+      zoom: 5,
+
+      mapType: "",
+
+      /*leafletLoaded: function() {
+        //var map = L.map(this.$.map).setView([this.long, this.lat], this.zoom);
+        var map = L.map(this.$.map).setView([139, 35], 5);
+        var layer = L.esri.basemapLayer("Streets");
+        map.addLayer(layer);
+
+        this.fire('leaflet-ready');
+      },*/
+
+      ready: function() {
+        console.log("leaflet-api: ready");
+        var leafletUrl = this.leafletUrl;
+        this.leafletUrl = leafletUrl;
+        addScript(this.leafletUrl, "leaflet");
+      }/*,
+
+      addScript: function(src, type) {
+        console.log("leaflet-api: addScript");
+        var script = document.createElement('script');
+        script.src = src;
+        if(type === "leaflet") {
+          script.onload = this.mapReady;
+        }
+        else if(type === "esri") {
+          script.onload = this.layerReady;
+        }
+        //script.onerror = this.error.bind(this);
+        var s = document.querySelector('script');
+        s.parentNode.insertBefore(script, s);
+        this.script = script;
+      },
+
+      mapReady: function() {
+        console.log("leaflet-api: mapReady");
+        console.log(L.map);
+        //console.log(L.esri);
+
+        //var map = L.map(this.$.map).setView([this.long, this.lat], this.zoom);
+        this.map = L.map('map').setView([139, 35], 5);
+
+        var esrileafletUrl = this.esrileafletUrl;
+        this.esrileafletUrl = esrileafletUrl;
+        this.addScript(this.esrileafletUrl, "esri");
+      },
+
+      layerReady: function() {
+        console.log("leaflet-api: layerReady");
+
+        var layer = L.esri.basemapLayer("Streets");
+        this.map.addLayer(layer);
+      },*/
+
+    });
+
+    var map;
+
+    function layerReady() {
+      console.log("leaflet-api: layerReady");
+
+      var layer = L.esri.basemapLayer("Streets");
+      map.addLayer(layer);
+    }
+
+    function addScript(src, type) {
+      console.log("leaflet-api: addScript");
+      var script = document.createElement('script');
+      script.src = src;
+      if(type === "leaflet") {
+        script.onload = mapReady;
+      }
+      else if(type === "esri") {
+        script.onload = layerReady;
+      }
+      //script.onerror = this.error.bind(this);
+      var s = document.querySelector('script');
+      s.parentNode.insertBefore(script, s);
+      this.script = script;
+    }
+
+    function mapReady() {
+      console.log("leaflet-api: mapReady");
+      console.log(L.map);
+
+      var esrileafletUrl = 'http://ej000417/3rdParty/esriLeaflet/samples/lib/esri-leaflet/esri-leaflet.js';
+      console.log("esrileafletUrl: ", esrileafletUrl);
+      this.esrileafletUrl = esrileafletUrl;
+      addScript(this.esrileafletUrl, "esri");
+
+      //var map = L.map(this.$.map).setView([this.long, this.lat], this.zoom);
+      map = L.map('map').setView([38, 138], 5);
+    }
+
+  </script>
+</polymer-element>
